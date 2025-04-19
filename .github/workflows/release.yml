@@ -23,7 +23,7 @@ jobs:
           bun-version: latest
 
       - name: Install Dependencies
-        run: bun install
+        run: bun install --production --frozen-lockfile --prefer-offline --ignore-scripts
 
       - name: build-linux
         if: matrix.os == 'ubuntu-latest'
