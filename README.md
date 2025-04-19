@@ -51,7 +51,7 @@ $ cp .env.sample .env
    1. Navigate to the
       [GitHub Personal Access Tokens page](https://github.com/settings/tokens).
       (_Path: GitHub > Settings > Developer settings > Personal access tokens_).
-   2. Select either **"Fine-grained tokens"** (recommended for granular control)
+   2. Select either **"Fine-grained repo-scoped tokens"** (recommended for granular control)
       or **"Tokens (classic)"**.
    3. Click the **"Generate new token"** button.
    4. Provide a descriptive name for the token (e.g.,
@@ -66,6 +66,7 @@ $ cp .env.sample .env
       - `write:packages` (Needed if the workflow uploads packages to GitHub
         Packages)
       - `actions` (Specify read/write access for workflow management)
+      - `contents` (Specify read/write access for releases)
       - For basic release creation (without package uploads or workflow
         triggers), the `repo` scope is often sufficient. Apply the principle of
         least privilege by selecting only the scopes required for the workflow's
