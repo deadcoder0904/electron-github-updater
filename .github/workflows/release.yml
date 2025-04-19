@@ -17,49 +17,25 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v3
 
-      - name: Install Bun
-        uses: oven-sh/setup-bun@v1
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-          bun-version: latest
+          node-version: 16
 
       - name: Install Dependencies
-        run: bun install --production --frozen-lockfile --prefer-offline --ignore-scripts
-
-      - name: Install Snapcraft
-        if: matrix.os == 'ubuntu-latest'
-        run: sudo snap install snapcraft --classic
-
-      - name: Install dependencies for app-builder
-        if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install -y libx11-xcb1 libxcomposite1 libxrandr2 libatk1.0-0 libpangocairo-1.0-0 libgtk-3-0 libxss1
-
-      - name: Fix permissions for app-builder
-        if: matrix.os == 'ubuntu-latest'
-        run: chmod +x ./node_modules/app-builder-bin/linux/x64/app-builder
-
-      - name: Debug environment (optional)
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          echo "Node.js version:"
-          node -v
-          echo "npm version:"
-          npm -v
-          echo "App-builder binary version:"
-          ./node_modules/app-builder-bin/linux/x64/app-builder --version || echo "Failed to get version"
-          echo "Environment variables:"
-          printenv
+        run: npm install
 
       - name: build-linux
         if: matrix.os == 'ubuntu-latest'
-        run: bun run build:linux
+        run: npm run build:linux
 
       - name: build-mac
         if: matrix.os == 'macos-latest'
-        run: bun run build:mac
+        run: npm run build:mac
 
       - name: build-win
         if: matrix.os == 'windows-latest'
-        run: bun run build:win
+        run: npm run build:win
 
       - name: release
         uses: softprops/action-gh-release@v1
