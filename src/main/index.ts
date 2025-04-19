@@ -2,13 +2,13 @@ import { app, BrowserWindow, shell } from 'electron'
 import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import {updateElectronApp} from 'update-electron-app'
+import { updateElectronApp } from 'update-electron-app'
 
 updateElectronApp({
-  repo: 'deadcoder0904/electron-github-updater',
-  updateInterval: '1h',
-  notifyUser: true,
-  logger: console
+	repo: 'deadcoder0904/electron-github-updater',
+	updateInterval: '1h',
+	notifyUser: true,
+	logger: console,
 })
 
 function createWindow(): void {
