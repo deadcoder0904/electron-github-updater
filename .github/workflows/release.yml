@@ -39,7 +39,7 @@ jobs:
           echo "Electron version: $(bun run electron --version || true)"
 
       - name: Install Dependencies
-        run: bun install --production --frozen-lockfile --prefer-offline --ignore-script
+        run: bun install --frozen-lockfile
 
       - name: Install Snapcraft
         # Only install Snapcraft on Ubuntu
