@@ -51,8 +51,8 @@ $ cp .env.sample .env
    1. Navigate to the
       [GitHub Personal Access Tokens page](https://github.com/settings/tokens).
       (_Path: GitHub > Settings > Developer settings > Personal access tokens_).
-   2. Select either **"Fine-grained repo-scoped tokens"** (recommended for granular control)
-      or **"Tokens (classic)"**.
+   2. Select either **"Fine-grained repo-scoped tokens"** (recommended for
+      granular control) or **"Tokens (classic)"**.
    3. Click the **"Generate new token"** button.
    4. Provide a descriptive name for the token (e.g.,
       `electron-github-updater-release`).
@@ -85,8 +85,8 @@ $ cp .env.sample .env
    4. Click the **"New repository secret"** button.
    5. Assign a name that precisely matches the environment variable used to
       reference the token within your workflow YAML file. Use
-      `REPO_ACCESS_TOKEN`. _Note:_ Secret names prefixed with `GITHUB_` are
-      reserved by GitHub and will result in an error.
+      `REPO_ACCESS_TOKEN` for the token. _Note:_ Secret names prefixed with
+      `GITHUB_` are reserved by GitHub and will result in an error.
    6. Paste the token value copied in step 1.8 into the "Value" field.
    7. Click **"Add secret"** to finalize.
 
@@ -126,3 +126,43 @@ $ cp .env.sample .env
      within the release action step in your workflow definition.
    - Finalization requires manual review, potential addition of release notes,
      and explicit publishing via the **"Releases"** section on GitHub.
+
+### Using Snapcraft & Generating Credentials for CI
+
+If you want to build and publish your Electron app as a Snap package using Snapcraft in CI (e.g., GitHub Actions), you need to authenticate Snapcraft non-interactively. Here’s how:
+
+1. **Create a Snapcraft Account**
+   - Go to [https://snapcraft.io/](https://snapcraft.io/) and sign up or log in with your Ubuntu One account.
+
+2. **Register Your Snap Name** (if you haven't already)
+   - Follow the instructions at [https://snapcraft.io/docs/registering-your-app-name](https://snapcraft.io/docs/registering-your-app-name). All snap names are [currently subject to a manual review.](https://forum.snapcraft.io/t/manual-review-of-all-new-snap-name-registrations/39440). [Follow this link](https://dashboard.snapcraft.io/register-snap) to submit a name request for your snap.
+
+3. **Install Snapcraft Locally**
+   - On Ubuntu:
+     ```sh
+     sudo snap install snapcraft --classic
+     ```
+   - On macOS (with Homebrew):
+     ```sh
+     brew install snapcraft
+     ```
+
+4. **Generate Snapcraft Store Credentials**
+   - Run the following, replacing `<your-snap-name>` with your app's snap name:
+     ```sh
+     snapcraft export-login --snaps <your-snap-name> --channels stable - | tee snapcraft_credentials.json
+     ```
+   - This will create a `snapcraft_credentials.json` file containing your credentials.
+
+5. **Add Credentials to GitHub Secrets**
+   - Open your repo on GitHub.
+   - Go to **Settings > Secrets and variables > Actions**.
+   - Click **New repository secret**.
+   - Name it: `SNAPCRAFT_STORE_CREDENTIALS`
+   - Paste the contents of `snapcraft_credentials.json` as the value.
+
+6. **Reference the Secret in Your Workflow**
+   - The workflow is already set up to use this secret for Snapcraft publishing on Linux builds.
+
+7. **Security Note**
+   - Never commit your credentials file to the repository. Only store it in GitHub Secrets or your local `.env` file (for local testing).
